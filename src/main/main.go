@@ -13,10 +13,6 @@ import (
 var localFilesPath = []string{""}
 
 func main()  {
-
-	downloadFile("2.mp4")
-	return
-
 	//读取本地目录
 	getFiles("G:\\课程")
 	//获取服务器目录
