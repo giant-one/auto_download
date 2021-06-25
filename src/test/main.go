@@ -1,12 +1,16 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"github.com/cheggaaa/pb"
 	"io"
 	"math/rand"
 	"net/http"
 	"os"
+	"os/exec"
+	"path/filepath"
+	"runtime"
 	"strconv"
 	"strings"
 	"sync"
@@ -14,8 +18,42 @@ import (
 )
 
 func main() {
-	ExampleCopy()
+	srt := "D:/project/golang/auto_downlaod/src/main/\\课程/001 Swoole和TCP三次握手.mp4"
+	str1 := strings.Split(srt, "\\")
+	fmt.Printf("%v", str1)
+	//ExampleCopy()
 	//Example_multiple()
+}
+
+func substr(s string, pos, length int) string {
+	runes := []rune(s)
+	l := pos + length
+	if l > len(runes) {
+		l = len(runes)
+	}
+	return string(runes[pos:l])
+}
+
+func GetCurrentPath() (string, error) {
+	file, err := exec.LookPath(os.Args[0])
+	if err != nil {
+		return "", err
+	}
+	path, err := filepath.Abs(file)
+	if err != nil {
+		return "", err
+	}
+	//fmt.Println("path111:", path)
+	if runtime.GOOS == "windows" {
+		path = strings.Replace(path, "\\", "/", -1)
+	}
+	//fmt.Println("path222:", path)
+	i := strings.LastIndex(path, "/")
+	if i < 0 {
+		return "", errors.New(`Can't find "/" or "\".`)
+	}
+	//fmt.Println("path333:", path)
+	return string(path[0 : i+1]), nil
 }
 
 func Example_multiple() {
@@ -53,7 +91,7 @@ func ExampleCopy() {
 	//	return
 	//}
 	//sourceName, destName := os.Args[1], os.Args[2]
-	sourceName, destName := "http://vd3.bdstatic.com/mda-kgvf0kqtznpgdig6/v1-cae/sc/mda-kgvf0kqtznpgdig6.mp4?v_from_s=tc_haokan_4469&auth_key=1623928979-0-0-4eb57fca164ea6036d8ce3e0d2ee931f&bcevod_channel=searchbox_feed&pd=1&pt=3&abtest=3000156_2", "a.mp4"
+	sourceName, destName := "http://192.168.1.104/index.php?method=download_file&fileName=%E5%8F%91%E5%B8%83%E8%A7%86%E9%A2%91%2F001%20Swoole%E5%92%8CTCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B.mp4", "a.mp4"
 
 	// check source
 	var source io.Reader
